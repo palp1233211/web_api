@@ -1,4 +1,5 @@
 <?php
+namespace api\App\Controllers;
 
 class IndexController extends ControllerBase
 {
