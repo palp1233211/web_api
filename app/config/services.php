@@ -7,6 +7,10 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
+use Phalcon\Dispatcher;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Events\Event;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 
 /**
  * Shared configuration service
@@ -14,6 +18,43 @@ use Phalcon\Flash\Direct as Flash;
 $di->setShared('config', function () {
     return include APP_PATH . "/config/config.php";
 });
+
+
+$di->setShared(
+    'dispatcher',
+    function () {
+        // Create an EventsManager
+        $eventsManager = new EventsManager();
+
+        // Attach a listener
+        $eventsManager->attach(
+            'dispatch:beforeException',
+            function (Event $event, $dispatcher, Exception $exception) {
+
+                // Alternative way, controller or action doesn't exist
+                switch ($exception->getCode()) {
+                    case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                    case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                        $dispatcher->forward(
+                            [
+                                'controller' => 'index',
+                                'action'     => 'notfound',
+                            ]
+                        );
+
+                        return false;
+                }
+            }
+        );
+
+        $dispatcher = new MvcDispatcher();
+
+        // Bind the EventsManager to the dispatcher
+        $dispatcher->setEventsManager($eventsManager);
+
+        return $dispatcher;
+    }
+);
 
 /**
  * The URL component is used to generate all kind of urls in the application
