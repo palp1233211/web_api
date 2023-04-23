@@ -20,6 +20,6 @@ $loader->registerNamespaces(
 )->registerFiles(
     [
         //这些文件自动加载到 register() 方法中。
-        APP_PATH .'/common/functions.php',
+        //APP_PATH .'/common/functions.php',
     ]
 )->register();

@@ -10,7 +10,7 @@ defined('PROJECT_NAME') || define('PROJECT_NAME', 'web_api');
 return new \Phalcon\Config([
     'database' => [
         'adapter'     => 'Mysql',
-        'host'        => 'localhost',
+        'host'        => env('redis.host'),
         'username'    => 'root',
         'password'    => '',
         'dbname'      => 'test',

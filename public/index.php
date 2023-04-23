@@ -8,6 +8,8 @@ define('APP_PATH', BASE_PATH . '/app');
 
 try {
 
+    require_once APP_PATH .'/common/functions.php';
+
     /**
      * The FactoryDefault Dependency Injector automatically registers
      * the services that provide a full stack framework.

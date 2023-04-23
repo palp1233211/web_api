@@ -11,8 +11,7 @@ class IndexController extends ControllerBase
 
     public function notfoundAction()
     {
-        var_dump(env('host'));
-        $this->ajaxReturn('error', 404 , '');
+        $this->ajaxReturn('ok', 200 , ['token'=>'123']);
     }
 }
 
