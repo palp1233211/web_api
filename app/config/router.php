@@ -12,6 +12,12 @@ $routerRules = [
         'action'=>2,
         'params' => 3,
     ),
+    '/vue-element-admin/:controller/:action/:params' => array(
+        'namespace' => $namespace,
+        'controller'=>1,
+        'action'=>2,
+        'params' => 3,
+    ),
     //默认路由
     '/' => array(
         'namespace' =>  $namespace,

@@ -1,10 +1,40 @@
 <?php
 namespace api\App\Controllers;
 
+use api\App\Library\Annotation;
+use api\App\Service\UserService;
 use Phalcon\Mvc\Controller;
 
 class ControllerBase extends Controller
 {
+
+    public function initialize()
+    {
+        //是否校验token
+        $is_validate_token = Annotation::getInstance()->hasMethodAnnotation('SkipTokenValidation');
+        if (!$is_validate_token) {
+            //校验是否登陆
+            $this->validateLogin();
+        }
+    }
+
+    /**
+     * 校验是否登陆
+     * @return bool
+     */
+    public function validateLogin()
+    {
+        $token = $this->request->get('token');
+        if (!$token) {
+            $this->ajaxReturn('error', 2001, []);
+        }
+        $user_service = UserService::getInstance();
+        if (!$user_service->isTokenValid($token)) {
+            $this->ajaxReturn('error', 2002, []);
+        }
+        return true;
+    }
+
     /**
      * 返回ajax响应
      * @param $message

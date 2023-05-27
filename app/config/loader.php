@@ -1,5 +1,7 @@
 <?php
 
+use Phalcon\Annotations\Adapter\Memory as AnnotationsAdapter;
+
 $loader = new \Phalcon\Loader();
 
 /**
@@ -7,11 +9,15 @@ $loader = new \Phalcon\Loader();
  * https://www.kancloud.cn/jaya1992/phalcon_doc_zh/753270
  */
 
+
 $loader->registerNamespaces(
     [
         //将其下的类都注册为某命名空间的类，以便在需要的时候将其加载
         'api\App\Controllers' => $config->application->controllersDir,
+        'api\App\Service' => $config->application->serviceDir,
         'api\App\Models' => $config->application->modelsDir,
+        'api\App\Library' => $config->application->libraryDir,
+        'api\app\Traits' => $config->application->traitsDir,
     ]
 )->registerDirs(
     [

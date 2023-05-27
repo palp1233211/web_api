@@ -5,12 +5,15 @@ use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
+use Phalcon\Annotations\Adapter\Memory as AnnotationsAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Dispatcher;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
+use Phalcon\Annotations\Annotation;
+use Phalcon\Annotations\Collection;
 
 /**
  * Shared configuration service
@@ -18,6 +21,9 @@ use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 $di->setShared('config', function () {
     return include APP_PATH . "/config/config.php";
 });
+
+// 创建注解适配器
+$annotationsAdapter = new AnnotationsAdapter();
 
 
 $di->setShared(
@@ -48,6 +54,51 @@ $di->setShared(
         );
 
         $dispatcher = new MvcDispatcher();
+
+
+
+
+/*
+        // 创建事件管理器
+        $eventsManager = new EventsManager();
+
+                // 处理请求前的事件
+                $eventsManager->attach(
+                    'dispatch:beforeDispatchLoop',
+                    function (Event $event, $dispatcher) use ($annotationsAdapter) {
+                    // 获取当前控制器和动作的注解
+                    $controllerName = $dispatcher->getControllerClass();
+                    $actionName = $dispatcher->getActiveMethod();
+
+                    // 获取控制器注解
+                    $controllerAnnotations = $annotationsAdapter->get($controllerName);
+
+                    $controllerAnnotation = $controllerAnnotations->getClassAnnotations();
+
+                    // 获取控制器的所有方法注解
+                    $methodsAnnotations = $annotationsAdapter->getMethods($controllerName);
+
+                    // 处理控制器注解
+        //        if ($controllerAnnotation->has('RoutePrefix')) {
+        //            $routePrefix = $controllerAnnotation->get('RoutePrefix')->getArgument(0);
+        //            $dispatcher->setControllerPrefix($routePrefix);
+        //        }
+
+                    // 处理动作注解
+                    if (isset($methodsAnnotations[$actionName])) {
+                        foreach ($methodsAnnotations[$actionName]->getAnnotations() as $annotation) {
+                            $a = $annotation;
+                            if ($annotation->getName() == 'return') {
+                                continue;
+                            }
+                            var_dump($a->getName());
+                            var_dump($a->getArguments());
+                        }
+
+                        die;
+                    }
+        });*/
+
 
         // Bind the EventsManager to the dispatcher
         $dispatcher->setEventsManager($eventsManager);
@@ -101,6 +152,28 @@ $di->setShared('view', function () {
 /**
  * Database connection is created based in the parameters defined in the configuration file
  */
+$di->setShared('redis', function () {
+    $config = $this->getConfig();
+    $frontCache = new \Phalcon\Cache\Frontend\Data(["lifetime" => $config->redis->lifetime,]);
+
+    $params = [
+        'host'  => $config->redis->host,
+        'prefix' => $config->redis->prefix,
+        'port' => $config->redis->port,
+        'auth' => $config->redis->auth,
+        'persistent' => false
+    ];
+
+    if ($config->database->adapter == 'Postgresql') {
+        unset($params['charset']);
+    }
+
+    return new \Phalcon\Cache\Backend\Redis($frontCache, $params);
+});
+
+/**
+ * Database connection is created based in the parameters defined in the configuration file
+ */
 $di->setShared('db', function () {
     $config = $this->getConfig();
 
@@ -117,9 +190,7 @@ $di->setShared('db', function () {
         unset($params['charset']);
     }
 
-    $connection = new $class($params);
-
-    return $connection;
+    return new $class($params);
 });
 
 
@@ -150,4 +221,24 @@ $di->setShared('session', function () {
     $session->start();
 
     return $session;
+});
+
+
+/**
+ * DI注册日志服务
+ */
+$di->setShared('logger', function () use ($di) {
+    $config = $this->getConfig(); //使用DI里注册的config服务
+    $day = date('Ymd');
+    $path = explode('/',strtolower($_SERVER['REQUEST_URI']));
+    $controller = $path[1];
+    $svc_controllers = ['svc','svcv2'];
+    if(in_array($controller,$svc_controllers)){
+        $logger_path = 'svclog';
+    }else{
+        $logger_path = 'log';
+    }
+    $logger = new \api\App\Library\PhalconBaseLogger($config->application->runtimeDir . $logger_path ."/log_{$day}.log");
+    $logger->setLogLevel($config->application->logLevel);
+    return $logger;
 });

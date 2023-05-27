@@ -26,3 +26,18 @@ if (!function_exists('env')) {
         return \Yaconf::get($project_name.'.'.$key, $default);
     }
 }
+
+if (!function_exists('md5_salt')) {
+    /**
+     * 加盐后的md5值
+     * @param $str
+     * @return string
+     */
+    function md5_salt($str)
+    {
+        $di = \Phalcon\Di::getDefault();
+        $salt = $di->get('config')->application->serviceDir;
+        return md5($str.$salt);
+    }
+}
+
