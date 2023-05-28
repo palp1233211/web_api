@@ -6,6 +6,7 @@
 
 namespace api\App\Library;
 
+use Phalcon\Logger\AdapterInterface;
 use const JSON_UNESCAPED_UNICODE;
 
 class PhalconBaseLogger extends \Phalcon\Logger\Adapter\File
@@ -42,24 +43,24 @@ class PhalconBaseLogger extends \Phalcon\Logger\Adapter\File
      * 日志记录
      * @param $log
      * @param array|null $context
-     * @return \Phalcon\Logger\AdapterInterface|void
+     * @return AdapterInterface
      */
     public function error($log, array $context = null)
     {
         $this->getDebugInfo($log);
-        parent::error("", $context);
+        return parent::error("", $context);
     }
 
     /**
      * 日志记录
      * @param $log
      * @param array|null $context
-     * @return \Phalcon\Logger\AdapterInterface|void
+     * @return AdapterInterface
      */
     public function info($log, array $context = null)
     {
         $this->getDebugInfo($log);
-        parent::info("", $context);
+        return parent::info("", $context);
     }
 
 

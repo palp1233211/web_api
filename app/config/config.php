@@ -35,6 +35,7 @@ return new \Phalcon\Config([
         'cacheDir'       => BASE_PATH . '/cache/',
         'traitsDir'      => APP_PATH . '/traits/',
         'runtimeDir'     => APP_PATH . '/runtime/',
+        'exceptionDir'   => APP_PATH . '/exception/',
         // This allows the baseUri to be understand project paths that are not in the root directory
         // of the webpspace.  This will break if the public/index.php entry point is moved or
         // possibly if the web server rewrite rules are changed. This can also be set to a static path.

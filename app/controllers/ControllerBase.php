@@ -25,11 +25,12 @@ class ControllerBase extends Controller
     public function validateLogin()
     {
         $token = $this->request->get('token');
-        if (!$token) {
+        $username = $this->request->get('username');
+        if (empty($token) || empty($username)) {
             $this->ajaxReturn('error', 2001, []);
         }
         $user_service = UserService::getInstance();
-        if (!$user_service->isTokenValid($token)) {
+        if (!$user_service->isTokenValid($token, $username)) {
             $this->ajaxReturn('error', 2002, []);
         }
         return true;

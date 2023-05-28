@@ -2,6 +2,9 @@
 
 namespace api\App\Service;
 
+use api\App\Library\PhalconBaseLogger;
+use api\App\Models\BaseModel;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Cache\Backend\Redis;
 use Phalcon\Di;
 use api\app\Traits\Singleton;
@@ -18,6 +21,13 @@ class BaseService
         return Di::getDefault();
     }
 
+    /**
+     * @return PhalconBaseLogger
+     */
+    public function getLogger()
+    {
+        return $this->getDI()->get('logger');
+    }
 
     /**
      * 获取redis对象
@@ -27,6 +37,16 @@ class BaseService
     {
         return $this->getDi()->get('redis');
     }
+
+    /**
+     * DB写权限
+     * @return Mysql
+     */
+    public function getWriteDB()
+    {
+        return (new BaseModel())->getWriteDB();
+    }
+
 
 
 }
