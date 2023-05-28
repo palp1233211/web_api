@@ -32,8 +32,8 @@ class ArticlePostTagsModel extends BaseModel
             $insert_data = [
                 'article_id' => null,
                 'post_tags_id' => null,
-                'created_at' => date(time()),
-                'updated_at' => date(time()),
+                'created_at' => date('Y-m-d H:i:s', time()),
+                'updated_at' => date('Y-m-d H:i:s', time()),
             ];
 
             foreach ($data as $datum) {

@@ -36,8 +36,8 @@ class ArticleModel extends BaseModel
                 'short_title' => $data['short_title'],
                 'small_image' => $data['small_image'],
                 'content' => $data['content'],
-                'created_at' => date(time()),
-                'updated_at' => date(time()),
+                'created_at' => date('Y-m-d H:i:s', time()),
+                'updated_at' => date('Y-m-d H:i:s', time()),
             ];
             $connection = $this->getWriteDB();
             $statement = $connection->prepare($sql);
