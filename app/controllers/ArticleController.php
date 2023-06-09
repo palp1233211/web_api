@@ -39,9 +39,9 @@ class ArticleController extends ControllerBase
     public function labelTagListAction()
     {
         $data = [
-            ['value'=>'选项1' ,'label'=> '黄金糕' ],
-            ['value'=>'选项2' ,'label'=> '双皮奶' ],
-            ['value'=>'选项3' ,'label'=> '蚵仔煎' ],
+            ['value'=>'1' ,'label'=> '黄金糕' ],
+            ['value'=>'2' ,'label'=> '双皮奶' ],
+            ['value'=>'3' ,'label'=> '蚵仔煎' ],
         ];
         $this->ajaxReturn('ok',200, $data);
     }
