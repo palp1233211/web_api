@@ -5,7 +5,7 @@ use api\App\Library\Annotation;
 use api\App\Service\UserService;
 use Phalcon\Mvc\Controller;
 
-class ControllerBase extends Controller
+class BaseController extends Controller
 {
 
     public function initialize()

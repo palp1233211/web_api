@@ -5,7 +5,7 @@ namespace api\App\Controllers;
 use api\App\Service\UploadService;
 use WebGeeker\Validation\ValidationException;
 
-class UploadController extends ControllerBase
+class UploadController extends BaseController
 {
     /**
      * 图片上传

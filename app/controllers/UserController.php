@@ -4,7 +4,7 @@ namespace api\App\Controllers;
 
 use api\App\Service\UserService;
 
-class UserController extends ControllerBase
+class UserController extends BaseController
 {
 
     /**

@@ -5,7 +5,7 @@ namespace api\App\Controllers;
 use api\App\Service\ArticleService;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 
-class ArticleController extends ControllerBase
+class ArticleController extends BaseController
 {
     public function createAction()
     {
