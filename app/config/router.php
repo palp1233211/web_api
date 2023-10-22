@@ -12,7 +12,7 @@ $routerRules = [
         'action'=>2,
         'params' => 3,
     ),
-    '/vue-element-admin/:controller/:action/:params' => array(
+    '/prod-api/:controller/:action/:params' => array(
         'namespace' => $namespace,
         'controller'=>1,
         'action'=>2,
