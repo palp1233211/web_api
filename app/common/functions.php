@@ -36,7 +36,7 @@ if (!function_exists('md5_salt')) {
     function md5_salt($str)
     {
         $di = \Phalcon\Di::getDefault();
-        $salt = $di->get('config')->application->serviceDir;
+        $salt = $di->get('config')->application->md5_salt;
         return md5($str.$salt);
     }
 }
