@@ -7,6 +7,10 @@ use Phalcon\Mvc\Controller;
 
 class BaseController extends Controller
 {
+    /**
+     * @var \api\App\Library\PhalconBaseLogger
+     */
+    public $logger;
 
     public function initialize()
     {
@@ -16,6 +20,7 @@ class BaseController extends Controller
             //校验是否登陆
             $this->validateLogin();
         }
+        $this->logger = $this->getDI()->get('logger');
     }
 
     /**

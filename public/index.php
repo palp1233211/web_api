@@ -11,6 +11,11 @@ try {
     require_once APP_PATH .'/common/functions.php';
 
     /**
+     * 常量
+     */
+    require_once APP_PATH .'/config/const.php';
+
+    /**
      * The FactoryDefault Dependency Injector automatically registers
      * the services that provide a full stack framework.
      */
