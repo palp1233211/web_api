@@ -12,7 +12,13 @@ $routerRules = [
         'action'=>2,
         'params' => 3,
     ),
-    '/prod-api/:controller/:action/:params' => array(
+    '/admin/:controller/:action/:params' => array(
+        'namespace' => $namespace,
+        'controller'=>1,
+        'action'=>2,
+        'params' => 3,
+    ),
+    '/swoole/:controller/:action/:params' => array(
         'namespace' => $namespace,
         'controller'=>1,
         'action'=>2,
@@ -26,21 +32,6 @@ $routerRules = [
     ),
 ];
 
-//注册路由
-$di->set('router', function () use ($routerRules) {
-    $router = new \Phalcon\Mvc\Router();
-    $router->notFound(
-        [
-            "controller" => "index",
-            "action" => "notfound",
-        ]
-    );
-
-
-    foreach ($routerRules as $key => $value) {
-        $router->add($key, $value);
-    }
-    $router->handle();
-    return $router;
-});
-
+foreach ($routerRules as $key => $value) {
+    $router->add($key, $value);
+}

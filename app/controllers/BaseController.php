@@ -18,7 +18,7 @@ class BaseController extends Controller
         $is_validate_token = Annotation::getInstance()->hasMethodAnnotation('SkipTokenValidation');
         if (!$is_validate_token) {
             //校验是否登陆
-            $this->validateLogin();
+//            $this->validateLogin();
         }
         $this->logger = $this->getDI()->get('logger');
     }
@@ -60,4 +60,14 @@ class BaseController extends Controller
         exit;
     }
 
+    public function swooleReturn($message, $code=1, $data=[])
+    {
+        $result = array(
+            'code' => $code,
+            'msg' => $message,
+            'data' => $data,
+        );
+        $this->response->setJsonContent($result);
+        return $this->response;
+    }
 }

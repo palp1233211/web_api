@@ -9,7 +9,7 @@ namespace api\App\Library;
 use Phalcon\Logger\AdapterInterface;
 use const JSON_UNESCAPED_UNICODE;
 
-class PhalconBaseLogger extends \Phalcon\Logger\Adapter\File
+class PhalconBaseLogger extends \Phalcon\Logger\Adapter\Stream
 {
 
     /**
@@ -31,7 +31,7 @@ class PhalconBaseLogger extends \Phalcon\Logger\Adapter\File
         }
         $log_info['type'] ='%type%';
         $log_info['timestamp'] = '%date%';
-        $log_info['data'] =$log;
+        $log_info['mysql'] =$log;
 //        is_array($log) && $log = json_encode($log);
         $log_info = json_encode($log_info, JSON_UNESCAPED_UNICODE);
         $formatter = new \Phalcon\Logger\Formatter\Line($log_info);

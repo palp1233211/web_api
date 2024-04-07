@@ -2,13 +2,13 @@
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
-use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Url as UrlResolver;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsAdapter;
-use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Session\Adapter\Stream as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
-use Phalcon\Dispatcher;
+use Phalcon\Dispatcher\Exception as Dispatcher;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\Dispatcher as MvcDispatcher;
@@ -47,7 +47,6 @@ $di->setShared(
                                 'action'     => 'notfound',
                             ]
                         );
-
                         return false;
                 }
             }
@@ -55,50 +54,10 @@ $di->setShared(
 
         $dispatcher = new MvcDispatcher();
 
-
-
-
-/*
-        // 创建事件管理器
-        $eventsManager = new EventsManager();
-
-                // 处理请求前的事件
-                $eventsManager->attach(
-                    'dispatch:beforeDispatchLoop',
-                    function (Event $event, $dispatcher) use ($annotationsAdapter) {
-                    // 获取当前控制器和动作的注解
-                    $controllerName = $dispatcher->getControllerClass();
-                    $actionName = $dispatcher->getActiveMethod();
-
-                    // 获取控制器注解
-                    $controllerAnnotations = $annotationsAdapter->get($controllerName);
-
-                    $controllerAnnotation = $controllerAnnotations->getClassAnnotations();
-
-                    // 获取控制器的所有方法注解
-                    $methodsAnnotations = $annotationsAdapter->getMethods($controllerName);
-
-                    // 处理控制器注解
-        //        if ($controllerAnnotation->has('RoutePrefix')) {
-        //            $routePrefix = $controllerAnnotation->get('RoutePrefix')->getArgument(0);
-        //            $dispatcher->setControllerPrefix($routePrefix);
-        //        }
-
-                    // 处理动作注解
-                    if (isset($methodsAnnotations[$actionName])) {
-                        foreach ($methodsAnnotations[$actionName]->getAnnotations() as $annotation) {
-                            $a = $annotation;
-                            if ($annotation->getName() == 'return') {
-                                continue;
-                            }
-                            var_dump($a->getName());
-                            var_dump($a->getArguments());
-                        }
-
-                        die;
-                    }
-        });*/
-
+        //设置默认命名空间
+        $dispatcher->setDefaultNamespace(
+            'api\App\Controllers'
+        );
 
         // Bind the EventsManager to the dispatcher
         $dispatcher->setEventsManager($eventsManager);
@@ -136,8 +95,8 @@ $di->setShared('view', function () {
             $volt = new VoltEngine($view, $this);
 
             $volt->setOptions([
-                'compiledPath' => $config->application->cacheDir,
-                'compiledSeparator' => '_'
+                'path' => $config->application->cacheDir,
+                'separator' => '_'
             ]);
 
             return $volt;
@@ -239,6 +198,11 @@ $di->setShared('logger', function () use ($di) {
         $logger_path = 'log';
     }
     $logger = new \api\App\Library\PhalconBaseLogger($config->application->runtimeDir . $logger_path ."/log_{$day}.log");
-    $logger->setLogLevel($config->application->logLevel);
+    $logger = new \Phalcon\Logger(
+        'messages',
+        [
+            'main' => $logger,
+        ]
+    );
     return $logger;
 });
