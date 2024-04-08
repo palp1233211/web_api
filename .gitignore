@@ -21,5 +21,6 @@ public/uploads/
 app/runtime/
 /nbproject/
 composer.lock
+/web_docker/
 /docker/
 
