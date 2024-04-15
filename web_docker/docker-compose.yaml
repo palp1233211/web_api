@@ -1,0 +1,66 @@
+#Docker Compose文件格式的版本 docker-compose -v 可以查看
+version: '3'
+
+services:
+  # Nginx Service
+  api_nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/log:/var/log/nginx/
+    depends_on:
+      - api_php
+      - api_mysql
+      - api_redis
+    networks:
+      - my_network
+
+  # PHP Service
+  api_php:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    volumes:
+      - ../:/mnt/www
+    ports:
+      - "8082:80"
+      - "8882:8882"
+    depends_on:
+      - api_mysql
+      - api_redis
+    networks:
+      - my_network
+
+  # MySQL Service
+  api_mysql:
+    platform: linux/amd64
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+          MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - my_network
+
+  # Redis Service
+  api_redis:
+    image: redis
+    #platform: linux/arm64
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

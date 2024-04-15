@@ -21,6 +21,7 @@ public/uploads/
 app/runtime/
 /nbproject/
 composer.lock
-/web_docker/
+/web_docker/mysql
+/web_docker/redis
 /docker/
 
