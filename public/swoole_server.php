@@ -41,8 +41,13 @@ try {
      */
     include APP_PATH . '/config/loader.php';
 
-    $http = new Swoole\Http\Server("0.0.0.0", 8882);
-
+    $http = new Swoole\Http\Server("0.0.0.0", 8882, SWOOLE_BASE);
+    $http->set([
+        'worker_num' => 4,
+        'max_wait_time' => 60,
+        'reload_async' => true,
+        'max_request'   => 100,
+    ]);
     $http->on("start", function ($server) {
         echo "Swoole HTTP Server is started at http://127.0.0.1:8882\n";
     });
@@ -51,9 +56,7 @@ try {
      */
     $app = new \Phalcon\Mvc\Application($di);
 
-    $p_request = new Phalcon\Http\Request();
-
-    $http->on("request", function ($request, $response) use ($app,$p_request) {
+    $http->on("request", function ($request, $response) use ($app) {
         // 转换 Swoole 请求到 Phalcon
         $_SERVER = [];
         if (isset($request->server)) {
@@ -82,7 +85,10 @@ try {
         if (isset($request->files)) {
             $_FILES = $request->files;
         }
-
+        if ($request->server['path_info'] == '/favicon.ico' || $request->server['request_uri'] == '/favicon.ico') {
+            $response->end();
+            return;
+        }
         // 处理应用程序的请求并获取响应
         ob_start();
 
@@ -90,7 +96,7 @@ try {
 //        $result = ob_get_contents();
         ob_end_clean();
         // 发送响应
-//        $response->header("Content-Type", "application/json");
+        $response->header("Content-Type", "application/json");
         $response->end($result);
     });
     $http->start();
