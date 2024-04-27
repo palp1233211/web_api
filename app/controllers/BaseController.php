@@ -18,7 +18,7 @@ class BaseController extends Controller
         $is_validate_token = Annotation::getInstance()->hasMethodAnnotation('SkipTokenValidation');
         if (!$is_validate_token) {
             //校验是否登陆
-//            $this->validateLogin();
+            $this->validateLogin();
         }
         $this->logger = $this->getDI()->get('logger');
     }
