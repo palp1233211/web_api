@@ -91,13 +91,12 @@ try {
         }
         // 处理应用程序的请求并获取响应
         ob_start();
-
-        $result = $app->handle($request->server['request_uri'])->getContent();
-//        $result = ob_get_contents();
+        // 处理请求
+        $output = $app->handle($request->server['request_uri'])->getContent();
+        $response->header("Content-Type", "text/json");
         ob_end_clean();
-        // 发送响应
-        $response->header("Content-Type", "application/json");
-        $response->end($result);
+        // 将输出发送给客户端
+        $response->end($output);
     });
     $http->start();
 

@@ -9,7 +9,7 @@ defined('PROJECT_NAME') || define('PROJECT_NAME', 'web_api');
 
 return new \Phalcon\Config([
     'database' => [
-        'adapter'     => env('database.adapter'),
+        'adapter'     => env('database.adapter','Mysql'),
         'host'        => env('database.host'),
         'username'    => env('database.username'),
         'password'    => env('database.password'),

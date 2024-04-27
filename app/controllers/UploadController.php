@@ -16,10 +16,10 @@ class UploadController extends BaseController
         try {
             $file_names = $this->request->getUploadedFiles();
             $path_arr = (new UploadService())->uploadedFiles($file_names);
-            $this->ajaxReturn('ok', 200, ['src'=>$path_arr]);
+            return $this->ajaxReturn('ok', 200, ['src'=>$path_arr]);
         }catch (ValidationException $e) {
             $msg = $e->getMessage() ?:'error';
-            $this->ajaxReturn($msg, 0, '');
+            return $this->ajaxReturn($msg, 0, '');
         }
     }
 

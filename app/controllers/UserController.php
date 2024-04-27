@@ -10,7 +10,7 @@ class UserController extends BaseController
     /**
      * 用户登陆校验接口
      * @SkipTokenValidation [校验token]
-     * @return void
+     * @return void|null
      */
     public function loginAction()
     {
@@ -18,9 +18,9 @@ class UserController extends BaseController
         $password = $this->request->getPost('password', 'trim');
         $info = UserService::getInstance()->validateUserInfo($username, $password);
         if (empty($info)) {
-            $this->ajaxReturn('账号或密码错误', 200, '');
+            return $this->ajaxReturn('账号或密码错误', 200, '');
         }
-        $this->ajaxReturn('ok', 200, $info);
+        return $this->ajaxReturn('ok', 200, $info);
     }
 
     /**
@@ -36,12 +36,12 @@ class UserController extends BaseController
             'avatar' => 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
             'name' => 'Super Admin',
         ];
-        $this->ajaxReturn('ok', 200, $data);
+        return $this->ajaxReturn('ok', 200, $data);
     }
 
     public function logoutAction()
     {
-        $this->ajaxReturn('ok', 200, '');
+        return $this->ajaxReturn('ok', 200, '');
     }
 
 }

@@ -25,18 +25,18 @@ class BaseController extends Controller
 
     /**
      * 校验是否登陆
-     * @return bool
+     * @return bool|\Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
      */
     public function validateLogin()
     {
         $token = $this->request->get('token');
         $username = $this->request->get('username');
         if (empty($token) || empty($username)) {
-            $this->ajaxReturn('error', 2001, []);
+            return $this->ajaxReturn('error', 2001, []);
         }
         $user_service = UserService::getInstance();
         if (!$user_service->isTokenValid($token, $username)) {
-            $this->ajaxReturn('error', 2002, []);
+            return $this->ajaxReturn('error', 2002, []);
         }
         return true;
     }
@@ -48,6 +48,23 @@ class BaseController extends Controller
      * @param $data
      * @return void
      */
+//    public function ajaxReturn($message, $code=1, $data=[])
+//    {
+//        $result = array(
+//            'code' => $code,
+//            'msg' => $message,
+//            'data' => $data,
+//        );
+//        $this -> response -> setJsonContent($result);
+//        $this -> response -> send();
+//        exit;
+//    }
+
+    /**
+     * @param $message
+     * @param $code
+     * @param $data
+     */
     public function ajaxReturn($message, $code=1, $data=[])
     {
         $result = array(
@@ -55,19 +72,6 @@ class BaseController extends Controller
             'msg' => $message,
             'data' => $data,
         );
-        $this -> response -> setJsonContent($result);
-        $this -> response -> send();
-        exit;
-    }
-
-    public function swooleReturn($message, $code=1, $data=[])
-    {
-        $result = array(
-            'code' => $code,
-            'msg' => $message,
-            'data' => $data,
-        );
-        $this->response->setJsonContent($result);
-        return $this->response;
+        return $this->response->setJsonContent($result);
     }
 }
