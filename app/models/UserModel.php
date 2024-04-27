@@ -13,10 +13,10 @@ class UserModel extends BaseModel
      *
      * @return string
      */
-//    public function getSource()
-//    {
-//        return 'user';
-//    }
+    public function initialize()
+    {
+        $this->setSource("user");
+    }
 
     /**
      * 判断用户信息是否正确

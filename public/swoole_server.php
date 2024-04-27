@@ -1,4 +1,6 @@
 <?php
+
+use api\App\Exception\RequestException;
 use Phalcon\Di\FactoryDefault;
 
 error_reporting(E_ALL);
@@ -56,7 +58,8 @@ try {
      */
     $app = new \Phalcon\Mvc\Application($di);
 
-    $http->on("request", function ($request, $response) use ($app) {
+    $http->on("request", function ($request, $response) use ($app,$di) {
+        $di->setShared('Response', $response);
         // 转换 Swoole 请求到 Phalcon
         $_SERVER = [];
         if (isset($request->server)) {
@@ -85,18 +88,24 @@ try {
         if (isset($request->files)) {
             $_FILES = $request->files;
         }
+        $_REQUEST = array_merge($_GET, $_POST, $_COOKIE, $_FILES);
+
         if ($request->server['path_info'] == '/favicon.ico' || $request->server['request_uri'] == '/favicon.ico') {
             $response->end();
             return;
         }
-        // 处理应用程序的请求并获取响应
-        ob_start();
-        // 处理请求
-        $output = $app->handle($request->server['request_uri'])->getContent();
-        $response->header("Content-Type", "text/json");
-        ob_end_clean();
-        // 将输出发送给客户端
-        $response->end($output);
+
+        try {
+            // 处理应用程序的请求并获取响应
+            ob_start();
+            // 处理请求
+            $output = $app->handle($request->server['request_uri'])->getContent();
+            ob_end_clean();
+            // 将输出发送给客户端
+            $response->end($output);
+        }catch (RequestException $e) {
+            $response->end(json_encode(['code'=>$e->getCode(),'message'=>$e->getMessage()]));
+        }
     });
     $http->start();
 

@@ -113,21 +113,18 @@ $di->setShared('view', function () {
  */
 $di->setShared('redis', function () {
     $config = $this->getConfig();
-    $frontCache = new \Phalcon\Cache\Frontend\Data(["lifetime" => $config->redis->lifetime,]);
-
+    $serializerFactory = new \Phalcon\Storage\SerializerFactory();
     $params = [
         'host'  => $config->redis->host,
         'prefix' => $config->redis->prefix,
         'port' => $config->redis->port,
         'auth' => $config->redis->auth,
-        'persistent' => false
+        'persistent' => false,
+        'lifetime' => $config->redis->lifetime,
+        'defaultSerializer' => 'Json'
     ];
 
-    if ($config->database->adapter == 'Postgresql') {
-        unset($params['charset']);
-    }
-
-    return new \Phalcon\Cache\Backend\Redis($frontCache, $params);
+    return new Phalcon\Cache\Adapter\Redis($serializerFactory, $params);
 });
 
 /**

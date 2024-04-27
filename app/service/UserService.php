@@ -32,8 +32,7 @@ class UserService extends BaseService
         if ($history_token) {
             $redis->delete($history_token);
         }
-        $redis->save($token, $username, 24*3600);
-        $redis->save($user_token_key, $token, 24*3600);
+        $redis->set($user_token_key, $token, 24*3600);
         return ['token'=>$token];
     }
 
@@ -46,7 +45,7 @@ class UserService extends BaseService
     public function isTokenValid($token, $username)
     {
         $redis = $this->getRedis();
-        return $redis->get($token) == $username;
+        return $redis->get($username.'_token') == $token;
     }
 
 }

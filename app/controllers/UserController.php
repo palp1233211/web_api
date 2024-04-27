@@ -18,7 +18,7 @@ class UserController extends BaseController
         $password = $this->request->getPost('password', 'trim');
         $info = UserService::getInstance()->validateUserInfo($username, $password);
         if (empty($info)) {
-            return $this->ajaxReturn('账号或密码错误', 200, '');
+            return $this->ajaxReturn('账号或密码错误', ERROR, '');
         }
         return $this->ajaxReturn('ok', 200, $info);
     }
