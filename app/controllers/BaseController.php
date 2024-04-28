@@ -4,6 +4,8 @@ namespace api\App\Controllers;
 use api\App\Exception\RequestException;
 use api\App\Library\Annotation;
 use api\App\Service\UserService;
+use Phalcon\Http\Response;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Controller;
 
 class BaseController extends Controller
@@ -67,8 +69,9 @@ class BaseController extends Controller
 
     /**
      * @param $message
-     * @param $code
-     * @param $data
+     * @param int $code
+     * @param array $data
+     * @return Response|ResponseInterface
      */
     public function ajaxReturn($message, $code=1, $data=[])
     {

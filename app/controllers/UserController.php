@@ -39,9 +39,18 @@ class UserController extends BaseController
         return $this->ajaxReturn('ok', 200, $data);
     }
 
+    /**
+     * 账号登出
+     * @return \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface
+     */
     public function logoutAction()
     {
-        return $this->ajaxReturn('ok', 200, '');
+        $username = $this->request->get('username', 'trim');
+        $static = UserService::getInstance()->delUserToken($username);
+        if ($static) {
+            return $this->ajaxReturn('ok', 200, '');
+        }
+        return $this->ajaxReturn('error', -1, '');
     }
 
 }
