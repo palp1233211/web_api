@@ -2,7 +2,7 @@
 
 namespace api\App\Service;
 
-use api\app\Traits\Singleton;
+use api\App\Traits\Singleton;
 use api\App\Models\UserModel;
 
 class UserService extends BaseService

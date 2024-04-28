@@ -17,8 +17,8 @@ $loader->registerNamespaces(
         'api\App\Service' => $config->application->serviceDir,
         'api\App\Models' => $config->application->modelsDir,
         'api\App\Library' => $config->application->libraryDir,
-        'api\app\Traits' => $config->application->traitsDir,
-        'api\app\Exception' => $config->application->exceptionDir,
+        'api\App\Traits' => $config->application->traitsDir,
+        'api\App\Exception' => $config->application->exceptionDir,
     ]
 )->registerDirs(
     [

@@ -1,6 +1,6 @@
 <?php
 
-namespace api\app\Traits;
+namespace api\App\Traits;
 
 /**
  * Trait Singleton

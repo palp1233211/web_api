@@ -104,7 +104,7 @@ try {
             // 将输出发送给客户端
             $response->end($output);
         }catch (RequestException $e) {
-            $response->end(json_encode(['code'=>$e->getCode(),'message'=>$e->getMessage()]));
+            $response->end(json_encode(['code'=>$e->getCode(),'msg'=>$e->getMessage()]));
         }
     });
     $http->start();

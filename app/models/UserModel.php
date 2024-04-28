@@ -2,7 +2,7 @@
 namespace api\App\Models;
 
 use Phalcon\Db\Exception;
-use api\app\Traits\Singleton;
+use api\App\Traits\Singleton;
 
 class UserModel extends BaseModel
 {

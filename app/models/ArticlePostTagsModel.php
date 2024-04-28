@@ -2,7 +2,7 @@
 
 namespace api\App\Models;
 
-use api\app\Traits\Singleton;
+use api\App\Traits\Singleton;
 
 class ArticlePostTagsModel extends BaseModel
 {

@@ -4,7 +4,7 @@ namespace api\App\Library;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsAdapter;
 use Phalcon\Di;
-use api\app\Traits\Singleton;
+use api\App\Traits\Singleton;
 use Phalcon\Annotations\Collection;
 
 /**

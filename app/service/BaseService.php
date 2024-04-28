@@ -7,7 +7,7 @@ use api\App\Models\BaseModel;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Cache\Backend\Redis;
 use Phalcon\Di;
-use api\app\Traits\Singleton;
+use api\App\Traits\Singleton;
 
 class BaseService
 {
